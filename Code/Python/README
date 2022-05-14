@@ -1,0 +1,6 @@
+These are some scripts I wrote to take the results of surface evolver and compare them to analytic solutions. 
+These are written in colab so I have provided links as well as files.
+
+RECTANGLE: https://colab.research.google.com/drive/10Jw5EfVUOYIfUlA92VLp0kFRc_sNaF-D?usp=sharing
+
+DISK: https://colab.research.google.com/drive/1XFHByE-5kdhUnZYRfj2zL1k7NKV4U7Mz?usp=sharing
