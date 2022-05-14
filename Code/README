@@ -1,0 +1,8 @@
+Here is much of the code written for the project.
+
+This includes:
+
+- Code written for Surface Evolver 
+- Python code written to analyse the Surface Evolver dumps and compare them to analytical solutions.
+- MATLAB code to analyse the images taken this was adapted from Wildeman code [https://github.com/swildeman/fcd] with changes referenced.
+- Arduino code to control the motor from the rotary encoder.
