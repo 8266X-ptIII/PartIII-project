@@ -1,0 +1,96 @@
+// Harry McMullan 
+// Part III project
+// Tilted disk co-planar with a fluid
+
+//------------------------------------------------------
+// Parameters
+
+// Dimentions
+PARAMETER Rin = 4e-3/2  //48e-3 /2
+PARAMETER Rout = 40e-3/2
+PARAMETER alpha = asin(1e-3/Rin)//0.05
+
+// Caplillary length
+PARAMETER gamma = 72e-3
+PARAMETER rho = 997
+
+gravity_constant 9.81
+
+//------------------------------------------------------
+// Constraints for the edge of disk and perimiter
+
+constraint disk_edge // Edge of disk
+formula: (x/cos(alpha))^2 + y^2 = Rin^2
+
+constraint disk_height // Height of edge
+formula: z = x * tan(alpha)
+
+constraint perimiter_edge // Perimiter boundary
+formula: x^2 + y^2 = Rout^2
+
+constraint perimiter_height // Confine to z = 0
+formula: z = 0
+
+//------------------------------------------------------
+vertices
+
+// The walls
+1  	Rout Rout 0		perimiter_edge, perimiter_height
+2  	-Rout Rout 0 	perimiter_edge, perimiter_height
+3  	-Rout -Rout 0	perimiter_edge, perimiter_height
+4  	Rout -Rout 0	perimiter_edge, perimiter_height
+
+// Edge of the disk
+5 	Rin 0 0			constraint disk_edge, disk_height
+6 	0 Rin 0 		constraint disk_edge, disk_height
+7 	-Rin 0 0 		constraint disk_edge, disk_height
+8 	0 -Rin 0 		constraint disk_edge, disk_height 
+
+
+//------------------------------------------------------
+edges
+
+// The boundary
+1   1 2 			perimiter_edge, perimiter_height
+2   2 3 			perimiter_edge, perimiter_height
+3   3 4 			perimiter_edge, perimiter_height
+4   4 1 			perimiter_edge, perimiter_height
+
+// The disk
+5	5 6 			constraint disk_edge, disk_height 
+6	6 7 			constraint disk_edge, disk_height 
+7 	7 8 			constraint disk_edge, disk_height 
+8	8 5 			constraint disk_edge, disk_height 
+
+// To join boundary to disk
+11	1 6
+12	2 7
+13	3 8
+14 	4 5
+
+//------------------------------------------------------
+faces
+
+// Fluid surface
+1   1 12 -6 -11 	tension gamma
+2	2 13 -7 -12		tension gamma
+3	3 14 -8 -13 	tension gamma
+4 	4 11 -5 -14 	tension gamma
+
+// Disk
+5	5 6 7 8 		fixed no_refine color blue
+
+//------------------------------------------------------
+bodies 
+
+1    1 2 3 4 5  	volume 0 density rho
+
+//------------------------------------------------------
+// Commands
+
+read
+re := {r;u;V 4}; //A better refine
+gogogo := {V;g}
+gogo := gogogo 20
+
+re // Arranges verticies nicely to start

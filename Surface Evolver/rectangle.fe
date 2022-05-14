@@ -1,0 +1,108 @@
+// Harry McMullan 
+// Part III project
+// Tilted disk co-planar with a fluid
+
+//------------------------------------------------------
+// Parameters
+
+// Dimentions
+PARAMETER width = 22e-3 / 2
+PARAMETER height = 38e-3 / 2
+PARAMETER Rout = 70e-3 
+PARAMETER alpha = 0.0174533 * 7
+
+// Caplillary length
+PARAMETER gamma = 72e-3
+PARAMETER rho = 997
+
+gravity_constant 9.81
+
+//------------------------------------------------------
+// Constraints for the edge of disk and perimiter
+
+constraint rec_front // Edge of disk
+formula: x = width*cos(alpha)
+
+constraint rec_back // Edge of disk
+formula: x = - width*cos(alpha)
+
+constraint rec_rside // Edge of disk
+formula: y = -height
+
+constraint rec_lside // Edge of disk
+formula: y= height
+
+constraint disk_height // Height of edge
+formula: z = x * tan(alpha)
+
+constraint perimiter_edge // Perimiter boundary
+formula: x^2 + y^2 = Rout^2
+
+constraint perimiter_height // Confine to z = 0
+formula: z = 0
+
+//------------------------------------------------------
+vertices
+
+// The walls
+1  	Rout Rout 0		perimiter_edge, perimiter_height
+2  	-Rout Rout 0 	perimiter_edge, perimiter_height
+3  	-Rout -Rout 0	perimiter_edge, perimiter_height
+4  	Rout -Rout 0	perimiter_edge, perimiter_height
+
+// Edge of the disk
+5 	height width 0			constraint rec_front, rec_lside, disk_height
+6 	-height width 0 		constraint rec_back, rec_lside, disk_height
+7 	-height -width 0 		constraint rec_back, rec_rside, disk_height
+8 	height -width 0 		constraint rec_front, rec_rside, disk_height 
+
+
+//------------------------------------------------------
+edges
+
+// The boundary
+1   1 2 			perimiter_edge, perimiter_height
+2   2 3 			perimiter_edge, perimiter_height
+3   3 4 			perimiter_edge, perimiter_height
+4   4 1 			perimiter_edge, perimiter_height
+
+// The disk
+5	5 6 			constraint rec_lside, disk_height 
+6	6 7 			constraint rec_back, disk_height 
+7 	7 8 			constraint rec_rside, disk_height 
+8	8 5 			constraint rec_front, disk_height 
+
+// To join boundary to disk
+11	1 5
+12	2 6
+13	3 7
+14 	4 8
+
+//------------------------------------------------------
+faces
+
+// Fluid surface
+1   1 12 -5 -11 	tension gamma color blue
+2	2 13 -6 -12		tension gamma color blue
+3	3 14 -7 -13 	tension gamma color blue
+4 	4 11 -8 -14 	tension gamma color blue
+
+// Disk
+5	5 6 7 8 		fixed no_refine color grey
+
+//------------------------------------------------------
+bodies 
+
+1    1 2 3 4 5  	volume 0 density rho
+
+//------------------------------------------------------
+// Commands
+
+read
+re := {r;u;V 4}; //A better refine
+gogogo := {V 2;g 10}
+gogo := gogogo 2
+
+re; // Arranges verticies nicely to start
+s;
+q
