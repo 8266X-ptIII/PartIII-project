@@ -1,3 +1,3 @@
 Here are some of the model STL files. These are mostly the final versions but there were many leading up to these. 
-I've only included the core models though there were many more supplementary models. These models were created in
-OpenSCAD. This code has been ommited.
+I've only included the core models though there were many more supplementary models to do smaller things such as hold the electronics. 
+These models were created in OpenSCAD, this code has been ommited. The OpenSCAD was exported to Cura for printing.
