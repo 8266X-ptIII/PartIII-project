@@ -1,1 +1,2 @@
-Here is some of the surface evolver code.
+Here is some of the surface evolver code. These would set up the environment for simulating the surface but the actual process of 
+creating the surface would happen in Eurface Evolver itself.
